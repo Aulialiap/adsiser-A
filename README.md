@@ -1,4 +1,4 @@
-#  Multi Web Server Application Deployment
+#  Multi Web Server Wordpress Website Deployment with Docker Container
 
 ## Pendahuluan
 Proyek ini bertujuan untuk mengimplementasikan deployment aplikasi web multi-server dengan menggunakan teknologi modern, seperti Docker dan AWS CLI. Infrastruktur yang dibangun mencakup database SQL, caching menggunakan Redis, load balancing dengan HAProxy, dan dua web server berbasis Nginx.
