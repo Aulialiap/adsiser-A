@@ -1,0 +1,57 @@
+services:
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress1
+    depends_on:
+      - db
+      - redis  # Tambahkan Redis sebagai dependency
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_REDIS_HOST: redis  # Tambahkan Redis Host
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - wp-network
+
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - wp-network
+
+  redis:
+    image: redis:alpine  # Tambahkan Redis
+    container_name: redis
+    command: ["redis-server", "--requirepass", "redis_password"] 
+    networks:
+      - wp-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    depends_on:
+      - wordpress
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+    networks:
+      - wp-network
+
+volumes:
+  wordpress-data:
+  db-data:
+
+networks:
+  wp-network:
+    driver: bridge
